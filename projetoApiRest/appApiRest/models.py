@@ -18,6 +18,7 @@ class Biblioteca(models.Model):
 class Jogo(models.Model):
     id_externo = models.IntegerField(unique=True)
     nome = models.CharField(max_length=100)
+    imagem = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nome

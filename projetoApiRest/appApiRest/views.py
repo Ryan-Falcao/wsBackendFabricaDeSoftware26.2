@@ -20,11 +20,11 @@ class BuscarJogosView(APIView):
         titulo = request.query_params.get("titulo")
 
         if not titulo:
-            return JsonResponse({"erro":"Informe um titulo de jogo"}, status=400)
+            return Response({"erro":"Informe um titulo de jogo na URL"}, status=400)
 
         jogos = CheapSharkService.buscar_jogos_por_titulo(titulo)
 
-        return JsonResponse(jogos, safe=False)
+        return Response(jogos)
 
 
 class AdicionarJogoABiblioteca(APIView): 
@@ -43,7 +43,7 @@ class AdicionarJogoABiblioteca(APIView):
         usuario = Usuario.objects.get(id=user_id)
 
 
-        jogo, criado = Jogo.objects.get_or_create(id_externo=id_jogo,defaults={ "nome": nome_jogo })
+        jogo = Jogo.objects.get_or_create(id_externo=id_jogo,defaults={ "nome": nome_jogo })
 
 
         if Biblioteca.objects.filter( usuario=usuario, jogo=jogo ).exists():
