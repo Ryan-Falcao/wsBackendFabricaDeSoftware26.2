@@ -10,6 +10,7 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 import requests
 from drf_spectacular.utils import extend_schema
 from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer
+from django.contrib.auth.hashers import make_password, check_password
 
 class  ApiStatusView(APIView):
     def get(self, request):
@@ -164,6 +165,42 @@ class AlterarNotaDeJogo(APIView):
             "jogo": biblioteca.jogo.nome,
             "nota": biblioteca.nota
         })
+
+class CriarNovoUsuario(APIView):
+
+    def post(self,request):
+
+        nome = request.data.get("nome")
+        email = request.data.get("email")
+        senha = request.data.get("senha")
+        senhaRepetida = request.data.get("senha-repetida")
+
+        if not email:
+            return Response({"erro":"o campo email é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
+        if not senha:
+            return Response({"erro":"o campo senha é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
+        if not senhaRepetida:
+            return Response({"erro":"o campo senha-repetida é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
+
+        
+        if Usuario.objects.filter(email = email).exists:
+            return Response({"erro":"Esse email já possui conta"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not senha == senhaRepetida:
+            return Response({"erro": "as duas senhas devem ser iguais"}, status=status.HTTP_400_BAD_REQUEST)
+
+        senhaCriptografada = make_password(senha)
+
+        Usuario.objects.create(nome = nome, email=email, senha=senhaCriptografada)
+
+        return Response({
+            "mensagem":"Conta criada com sucesso",
+            "nome": Usuario.nome,
+            "email": Usuario.email
+            }, status=status.HTTP_201_CREATED)
+
+        
+
 
 
 
