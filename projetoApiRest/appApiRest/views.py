@@ -32,6 +32,7 @@ class AdicionarJogoABiblioteca(APIView):
         id_jogo = request.data.get("id_externo") 
         user_id = request.data.get("user_id")
         nome_jogo = request.data.get("nome_jogo")
+        nota_jogo = request.data.get("nota_jogo")
 
         if not id_jogo:
             return Response( {"erro": "O id_externo é obrigatório"}, status=status.HTTP_400_BAD_REQUEST ) 

@@ -12,19 +12,24 @@ class CheapSharkService:
     @staticmethod
     def buscar_jogos_por_titulo(titulo):
 
-        url = f"{CheapSharkService.BASE_URL}/games"
+        try:
+            url = f"{CheapSharkService.BASE_URL}/games"
 
-        response = requests.get(url,params={"title": titulo},headers=CheapSharkService.HEADERS,timeout=10)
+            response = requests.get(url,params={"title": titulo},headers=CheapSharkService.HEADERS,timeout=10)
 
-        response.raise_for_status()
+            response.raise_for_status()
 
-        jogos = response.json()
+            jogos = response.json()
 
-        return [
-            {
-                "id_externo": int(jogo["gameID"]),
-                "nome": jogo["external"],
-                "imagem": jogo["thumb"],
+            return [
+                {
+                    "id_externo": int(jogo["gameID"]),
+                    "nome": jogo["external"],
+                    "imagem": jogo["thumb"],
+                }
+                for jogo in jogos
+            ]
+        except requests.exceptions.Timeout:
+            return{
+                "erro": "Erro ao buscar os jogos na API externa"
             }
-            for jogo in jogos
-        ]
