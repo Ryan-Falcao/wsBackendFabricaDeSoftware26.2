@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import ApiStatusView, BuscarJogosView, AdicionarJogoABiblioteca
+from .views import ApiStatusView, BuscarJogosView, AdicionarJogoABiblioteca, ListarBiblioteca, ExcluirJogoDaBiblioteca
 
 
 urlpatterns = [
     path('status/', ApiStatusView.as_view(), name='api-status'),
     path('jogos/buscar/', BuscarJogosView.as_view()),
     path('biblioteca/adicionar/', AdicionarJogoABiblioteca.as_view()),
+    path('biblioteca/<int:user_id>/', ListarBiblioteca.as_view()),
+    path('biblioteca/excluir/jogo/', ExcluirJogoDaBiblioteca.as_view())
 ]

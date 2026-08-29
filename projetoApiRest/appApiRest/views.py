@@ -59,6 +59,31 @@ class AdicionarJogoABiblioteca(APIView):
             status=status.HTTP_201_CREATED
         )
 
+class ListarBiblioteca(APIView):
+
+    def get(self, request, user_id):
+
+        if not Usuario.objects.filter(id=user_id).exists():
+            return Response( {"erro": "O usuário não existe"},status=status.HTTP_404_NOT_FOUND)
+
+        biblioteca = Biblioteca.objects.filter(usuario_id=user_id)
+
+        jogos = []
+
+        for item in biblioteca:
+            jogos.append({
+                "id": item.jogo.id,
+                "id_externo": item.jogo.id_externo,
+                "nome": item.jogo.nome
+            })
+
+        return Response(jogos)
+
+
+
+
+
+
         
 
         
