@@ -8,5 +8,5 @@ urlpatterns = [
     path('biblioteca/adicionar/', AdicionarJogoABiblioteca.as_view()),
     path('biblioteca/<int:user_id>/', ListarBiblioteca.as_view()),
     path('biblioteca/alterar/nota', AlterarNotaDeJogo.as_view()),
-    path('biblioteca/excluir/jogo/', ExcluirJogoDaBiblioteca.as_view()),
+    path('biblioteca/<int:user_id>/jogo/<int:jogo_id>/', ExcluirJogoDaBiblioteca.as_view()),
 ]

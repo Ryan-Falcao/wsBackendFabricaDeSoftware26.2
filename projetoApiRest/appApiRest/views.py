@@ -124,27 +124,30 @@ class ListarBiblioteca(APIView):
             })
 
         return Response(jogos)
-@extend_schema(
-    request=ExcluirJogoDaBibliotecaSerializer,
-    responses={201 : ExcluirJogoDaBibliotecaSerializer,}
-)
+
+
 class ExcluirJogoDaBiblioteca(APIView):
 
-    def delete(self, request):
+    def delete(self, request, user_id, jogo_id):
 
-        user_id = request.data.get("user_id")
-        jogo_id = request.data.get("jogo_id")
+        if not Biblioteca.objects.filter(
+            usuario_id=user_id,
+            jogo_id=jogo_id
+        ).exists():
+            return Response(
+                {"erro": "Esse jogo não está na sua biblioteca"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
+        Biblioteca.objects.filter(
+            usuario_id=user_id,
+            jogo_id=jogo_id
+        ).delete()
 
-        if not  Biblioteca.objects.filter(usuario_id = user_id, jogo_id=jogo_id).exists():
-            return Response({"erro":"esse jogo não está na sua biblioteca"}, status=status.HTTP_404_NOT_FOUND)
-
-        jogoDeletado = Biblioteca.objects.filter(usuario_id = user_id, jogo_id=jogo_id)
-
-        jogoDeletado.delete()
-
-        return Response({"Jogo excluido com sucesso"}, status=status.HTTP_200_OK)
-
+        return Response(
+            {"mensagem": "Jogo excluído com sucesso"},
+            status=status.HTTP_200_OK
+        )
 @extend_schema(
     request=AlterarNotaSerializer,
     responses={
