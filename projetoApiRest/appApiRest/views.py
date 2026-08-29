@@ -9,7 +9,7 @@ from .services import cheapshark_service
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 import requests
 from drf_spectacular.utils import extend_schema
-from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer
+from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer, CriarNovoUsuarioSerializer
 from django.contrib.auth.hashers import make_password, check_password
 
 class  ApiStatusView(APIView):
@@ -166,6 +166,7 @@ class AlterarNotaDeJogo(APIView):
             "nota": biblioteca.nota
         })
 
+@extend_schema(request=CriarNovoUsuarioSerializer,responses={201 : CriarNovoUsuarioSerializer})
 class CriarNovoUsuario(APIView):
 
     def post(self,request):
@@ -173,7 +174,7 @@ class CriarNovoUsuario(APIView):
         nome = request.data.get("nome")
         email = request.data.get("email")
         senha = request.data.get("senha")
-        senhaRepetida = request.data.get("senha-repetida")
+        senhaRepetida = request.data.get("senha_repetida")
 
         if not email:
             return Response({"erro":"o campo email é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
@@ -183,20 +184,20 @@ class CriarNovoUsuario(APIView):
             return Response({"erro":"o campo senha-repetida é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
 
         
-        if Usuario.objects.filter(email = email).exists:
+        if Usuario.objects.filter(email = email).exists():
             return Response({"erro":"Esse email já possui conta"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not senha == senhaRepetida:
+        if  senha != senhaRepetida:
             return Response({"erro": "as duas senhas devem ser iguais"}, status=status.HTTP_400_BAD_REQUEST)
 
-        senhaCriptografada = make_password(senha)
+        senha_hash = make_password(senha)
 
-        Usuario.objects.create(nome = nome, email=email, senha=senhaCriptografada)
+        usuario = Usuario.objects.create(nome = nome, email=email, senha=senha_hash)
 
         return Response({
             "mensagem":"Conta criada com sucesso",
-            "nome": Usuario.nome,
-            "email": Usuario.email
+            "nome": usuario.nome,
+            "email": usuario.email
             }, status=status.HTTP_201_CREATED)
 
         

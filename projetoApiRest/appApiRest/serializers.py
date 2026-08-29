@@ -25,3 +25,9 @@ class AlterarNotaResponseSerializer(serializers.Serializer):
 class ExcluirJogoDaBibliotecaSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     jogo_id = serializers.IntegerField()
+
+class CriarNovoUsuarioSerializer(serializers.Serializer):
+    nome = serializers.CharField()
+    email = serializers.EmailField()
+    senha = serializers.CharField()
+    senha_repetida = serializers.CharField()
