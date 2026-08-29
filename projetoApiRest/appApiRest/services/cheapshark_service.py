@@ -23,7 +23,8 @@ class CheapSharkService:
         return [
             {
                 "id_externo": int(jogo["gameID"]),
-                "nome": jogo["external"]
+                "nome": jogo["external"],
+                "imagem": jogo["thumb"],
             }
             for jogo in jogos
         ]
