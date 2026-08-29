@@ -20,7 +20,10 @@ class Biblioteca(models.Model):
 class Jogo(models.Model):
     id_externo = models.IntegerField(unique=True)
     nome = models.CharField(max_length=100)
-    imagem = models.CharField(max_length=100)
+    imagem = models.URLField(null=True, blank=True)
+    metacritic_link = models.CharField(max_length=200, null=True, blank=True)
+    preco = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    metacritic_score = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.nome

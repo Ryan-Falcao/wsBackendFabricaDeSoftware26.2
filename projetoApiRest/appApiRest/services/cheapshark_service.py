@@ -22,12 +22,14 @@ class CheapSharkService:
             jogos = response.json()
 
             return [
-                {
+                 {
                     "id_externo": int(jogo["gameID"]),
                     "nome": jogo["external"],
                     "imagem": jogo["thumb"],
-                }
-                for jogo in jogos
+                    "metacritic_link": jogo.get("metacriticLink"),
+                    "preco": float(jogo.get("salePrice")) if jogo.get("salePrice") else None,
+                } 
+                for jogo in jogos 
             ]
         except requests.exceptions.Timeout:
             return{
