@@ -130,7 +130,7 @@ class ListarBiblioteca(APIView):
 )
 class ExcluirJogoDaBiblioteca(APIView):
 
-    def post(self, request):
+    def delete(self, request):
 
         user_id = request.data.get("user_id")
         jogo_id = request.data.get("jogo_id")
