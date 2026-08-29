@@ -79,6 +79,22 @@ class ListarBiblioteca(APIView):
 
         return Response(jogos)
 
+class ExcluirJogoDaBiblioteca(APIView):
+
+    def post(self, request):
+
+        user_id = request.data.get("user_id")
+        jogo_id = request.data.get("jogo_id")
+
+
+        if not  Biblioteca.objects.filter(usuario_id = user_id, jogo_id=jogo_id).exists():
+            return Response({"erro":"esse jogo não está na sua biblioteca"}, status=status.HTTP_404_NOT_FOUND)
+
+        jogoDeletado = Biblioteca.objects.filter(usuario_id = user_id, jogo_id=jogo_id)
+
+        jogoDeletado.delete()
+
+        return Response({"Jogo excluido com sucesso"}, status=status.HTTP_200_OK)
 
 
 
