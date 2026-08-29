@@ -6,7 +6,10 @@ from .services.cheapshark_service import CheapSharkService
 from .models import Jogo, Biblioteca, Usuario
 from rest_framework import status
 from .services import cheapshark_service
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 import requests
+from drf_spectacular.utils import extend_schema
+from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer
 
 class  ApiStatusView(APIView):
     def get(self, request):
@@ -14,7 +17,17 @@ class  ApiStatusView(APIView):
             "status": "online",
             "message": "API esta rodando normalmente"
         })
-
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="titulo",
+            description="Título do jogo para realizar a busca",
+            required=True,
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+        )
+    ]
+)
 class BuscarJogosView(APIView):
 
     def get(self, request):
@@ -28,7 +41,10 @@ class BuscarJogosView(APIView):
 
         return Response(jogos)
 
-
+@extend_schema(
+    request=AdicionarJogoSerializer,
+    responses={ 201: AdicionarJogoSerializer,}
+)
 class AdicionarJogoABiblioteca(APIView):
 
     def post(self, request):
@@ -108,7 +124,10 @@ class ListarBiblioteca(APIView):
             })
 
         return Response(jogos)
-
+@extend_schema(
+    request=ExcluirJogoDaBibliotecaSerializer,
+    responses={201 : ExcluirJogoDaBibliotecaSerializer,}
+)
 class ExcluirJogoDaBiblioteca(APIView):
 
     def post(self, request):
@@ -126,6 +145,13 @@ class ExcluirJogoDaBiblioteca(APIView):
 
         return Response({"Jogo excluido com sucesso"}, status=status.HTTP_200_OK)
 
+@extend_schema(
+    request=AlterarNotaSerializer,
+    responses={
+        201: AlterarNotaSerializer,
+    }
+
+)
 class AlterarNotaDeJogo(APIView):
 
     def put(self,request):
@@ -138,7 +164,7 @@ class AlterarNotaDeJogo(APIView):
             return Response({"erro": "user_id é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
         if not jogo_id:
             return Response({"erro": "jogo_id é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
-        if not nota:
+        if nota is None:
             return Response({"erro": "a nota é obrigatória"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
