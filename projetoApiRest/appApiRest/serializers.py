@@ -7,18 +7,17 @@ from .models import Usuario
 class AdicionarJogoSerializer(serializers.Serializer):
 
     nome_jogo = serializers.CharField(max_length=100)
-    nota_jogo = serializers.IntegerField(min_value=0, max_value=10)
+    nota_jogo = serializers.DecimalField( min_value=0,max_value=10,max_digits=3, decimal_places=1)
 
 
 class AdicionarJogoResponseSerializer(serializers.Serializer):
     mensagem = serializers.CharField()
     jogo = serializers.CharField()
-    nota = serializers.IntegerField()
+    nota = serializers.DecimalField( min_value=0,max_value=10,max_digits=3, decimal_places=1)
 
 class AlterarNotaSerializer(serializers.Serializer):
-
     jogo_id = serializers.IntegerField()
-    nota = serializers.IntegerField(min_value=0,max_value=10)
+    nota = serializers.DecimalField(max_digits=3,decimal_places=1,min_value=0,max_value=10)
 
 class AlterarNotaResponseSerializer(serializers.Serializer):
     mensagem = serializers.CharField()
@@ -47,6 +46,9 @@ class LoginSerializer(serializers.Serializer):
             usuario = Usuario.objects.get(email=email)
         except Usuario.DoesNotExist:
             raise serializers.ValidationError( "Email ou senha inválidos.")
+
+        if not check_password(senha, usuario.senha):
+            raise serializers.ValidationError("Senha Errada OTARIO")
 
         refresh = RefreshToken()
 

@@ -20,7 +20,8 @@ class Usuario(models.Model):
 class Biblioteca(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='bibliotecas')
     jogo = models.ForeignKey('Jogo', on_delete=models.CASCADE, related_name='usuarios')
-    nota = models.IntegerField(null=True,blank=True,  validators=[MinValueValidator(0),MaxValueValidator(10)])
+    nota = models.DecimalField(max_digits=3,decimal_places=1,null=True,blank=True,validators=[MinValueValidator(0),MaxValueValidator(10)]
+)
 
     def __str__(self):
          return f"{self.usuario.nome} - {self.jogo.nome}"

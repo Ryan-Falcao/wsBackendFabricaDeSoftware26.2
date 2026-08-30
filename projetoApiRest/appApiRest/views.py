@@ -49,9 +49,15 @@ class AdicionarJogoABiblioteca(APIView):
 
     def post(self, request):
 
+        serializer = AdicionarJogoSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+
         usuario = request.user
-        nome_jogo = request.data.get("nome_jogo")
-        nota_jogo = request.data.get("nota_jogo")
+        nome_jogo = serializer.validated_data["nome_jogo"]
+        nota_jogo = serializer.validated_data["nota_jogo"]
 
     
         if not nome_jogo:
@@ -91,9 +97,7 @@ class AdicionarJogoABiblioteca(APIView):
                 "mensagem": "Jogo adicionado à biblioteca!",
                 "jogo": jogo.nome,
                 "nota": nota_jogo,
-                "preco": jogo.preco,
-                "metacritic_link": jogo.metacritic_link,
-                "OBS": "Alguns jogos não possuem dados de preço ou metacritic_link, não se preocupe"
+                "imagem": jogo.imagem,
             },
             status=status.HTTP_201_CREATED
         )
@@ -124,6 +128,12 @@ class ListarBiblioteca(APIView):
                 "imagem": item.jogo.imagem
             })
 
+        if jogos == []:
+            return Response(
+                {"mensagem":"Você ainda não possui nenhum jogo adicionado"}
+            )
+
+
         return Response(jogos)
 
 
@@ -145,13 +155,20 @@ class ExcluirJogoDaBiblioteca(APIView):
 @extend_schema(request=AlterarNotaSerializer,responses={201: AlterarNotaSerializer,})
 class AlterarNotaDeJogo(APIView):
 
+    
+
     permission_classes = [IsAuthenticated]
 
     def put(self,request):
 
+        serializer = AlterarNotaSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
         usuario = request.user
-        jogo_id = request.data.get("jogo_id")
-        nota = request.data.get("nota")
+        jogo_id = serializer.validated_data["jogo_id"]
+        nota = serializer.validated_data["nota"]
 
         if not jogo_id:
             return Response({"erro": "jogo_id é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
@@ -178,10 +195,15 @@ class CriarNovoUsuario(APIView):
 
     def post(self,request):
 
-        nome = request.data.get("nome")
-        email = request.data.get("email")
-        senha = request.data.get("senha")
-        senhaRepetida = request.data.get("senha_repetida")
+        serializer = CriarNovoUsuarioSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response( serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+        nome = serializer.validated_data["nome"]
+        email = serializer.validated_data["email"]
+        senha = serializer.validated_data["senha"]
+        senhaRepetida = serializer.validated_data["senha_repetida"]
 
         if not email:
             return Response({"erro":"o campo email é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
@@ -214,6 +236,7 @@ class LoginView(APIView):
     def post(self, request):
 
         serializer = LoginSerializer(data=request.data)
+        
 
         if serializer.is_valid():
             return Response(serializer.validated_data,status=status.HTTP_200_OK)
