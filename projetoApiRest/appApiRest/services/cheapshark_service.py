@@ -35,3 +35,15 @@ class CheapSharkService:
             return{
                 "erro": "Erro ao buscar os jogos na API externa"
             }
+
+
+    @staticmethod
+    def buscar_ofertas():
+        try:
+            url = f"{CheapSharkService.BASE_URL}/deals"
+
+            response = requests.get(url,headers=CheapSharkService.HEADERS,timeout=10)
+
+            response.raise_for_status()
+
+            ofertas = response.json()
