@@ -38,13 +38,29 @@ class CheapSharkService:
 
 
     @staticmethod
-    def buscar_ofertas():
+    def buscar_ofertas(**filtros):
         try:
             url = f"{CheapSharkService.BASE_URL}/deals"
+
+            params = {
+                
+                "sortBy": filtros.get("sort_by"),
+                "lowerPrice": filtros.get("lower_price"),
+                "upperPrice": filtros.get("upper_price"),
+                "title": filtros.get("title"),
+               
+            }
+
+            params = {
+                chave: valor
+                for chave, valor in params.items()
+                if valor is not None
+            }
 
             response = requests.get(
                 url,
                 headers=CheapSharkService.HEADERS,
+                params=params,
                 timeout=10
             )
 
@@ -55,8 +71,8 @@ class CheapSharkService:
             return [
                 {
                     "nome": oferta["title"],
-                    "preco_promocional": f"USD {float(oferta["salePrice"])}",
-                    "preco_normal": f"USD {float(oferta["normalPrice"])}",
+                    "preco_promocional": f"USD {float(oferta['salePrice'])}",
+                    "preco_normal": f"USD {float(oferta['normalPrice'])}",
                     "desconto": f"{float(oferta['savings']):.2f}%",
                     "nota_metacritic": oferta.get("metacriticScore"),
                     "avaliacao_steam": f"{oferta.get('steamRatingPercent')}%",
@@ -67,3 +83,4 @@ class CheapSharkService:
 
         except requests.exceptions.RequestException as e:
             raise Exception(f"Erro ao buscar ofertas: {str(e)}")
+

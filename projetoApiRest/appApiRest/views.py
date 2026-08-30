@@ -8,7 +8,7 @@ from rest_framework import status
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 import requests
 from drf_spectacular.utils import extend_schema
-from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer, CriarNovoUsuarioSerializer,  LoginSerializer
+from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer, CriarNovoUsuarioSerializer,  LoginSerializer, OfertaFiltroSerializer
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.permissions import IsAuthenticated
 
@@ -245,17 +245,28 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
+
 class BuscarOfertasView(APIView):
 
+    @extend_schema(
+        parameters=[OfertaFiltroSerializer]
+    )
     def get(self, request):
-        try:
-            ofertas = CheapSharkService.buscar_ofertas()
 
-            return Response(ofertas)
+        serializer = OfertaFiltroSerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            ofertas = CheapSharkService.buscar_ofertas(**serializer.validated_data)
+
+            return Response({
+                "Observação":"Os dados apresentados representam um histórico de ofertas encontradas pela API. Algumas promoções podem não estar mais ativas ou podem ter sofrido alterações de preço desde a última atualização.",
+                "Ofertas":ofertas
+                })
 
         except requests.RequestException:
-            
-            return Response({"erro": "A API externa parece não estar funcionando no momento"},  status=status.HTTP_504_GATEWAY_TIMEOUT)
+            return Response({"erro": "A API externa parece não estar funcionando no momento"},status=status.HTTP_504_GATEWAY_TIMEOUT)
+
 
 
 

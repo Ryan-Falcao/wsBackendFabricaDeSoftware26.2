@@ -66,34 +66,35 @@ class LoginSerializer(serializers.Serializer):
             }
         }
 
-class OfertaFiltroSerializer(serializers.Serializer): 
-    store_id = serializers.CharField(required=False) 
-    page_number = serializers.IntegerField(required=False, min_value=0) 
-    page_size = serializers.IntegerField(required=False, min_value=1, max_value=60) 
-    sort_by = serializers.ChoiceField( 
-        required=False, 
-        choices=[ 
-            "DealRating", 
-            "Title", 
-            "Savings", 
-            "Price", 
-            "Metacritic", 
-            "Reviews", 
-            "ReviewCount", 
-            "Release", 
-            "Store", 
-            "Recent", 
-            ] ) 
-    desc = serializers.BooleanField(required=False) 
-    lower_price = serializers.FloatField(required=False, min_value=0) 
-    upper_price = serializers.FloatField(required=False, min_value=0) 
-    metacritic = serializers.IntegerField( required=False, min_value=0, max_value=100 ) 
-    steam_rating = serializers.IntegerField( required=False, min_value=0, max_value=100 ) 
-    minimum_review_count = serializers.IntegerField( required=False, min_value=0 ) 
-    max_age = serializers.IntegerField( required=False, min_value=1, max_value=2500 ) 
-    steam_app_id = serializers.CharField(required=False) 
-    title = serializers.CharField(required=False) 
-    exact = serializers.BooleanField(required=False) 
-    aaa = serializers.BooleanField(required=False) 
-    steamworks = serializers.BooleanField(required=False) 
-    on_sale = serializers.BooleanField(required=False)
+from rest_framework import serializers
+
+
+class OfertaFiltroSerializer(serializers.Serializer):
+
+
+
+    sort_by = serializers.ChoiceField(
+    required=False,
+    choices=[
+        ("DealRating", "Avaliação da oferta"),
+        ("Title", "Título do jogo"),
+        ("Savings", "Percentual de desconto"),
+        ("Price", "Preço"),
+        ("Metacritic", "Nota do Metacritic"),
+        ("Reviews", "Avaliação dos usuários"),
+        ("ReviewCount", "Quantidade de avaliações"),
+        ("Release", "Data de lançamento"),
+        ("Store", "Loja"),
+        ("Recent", "Ofertas mais recentes"),
+    ],
+    help_text="Define o critério utilizado para ordenar as ofertas."
+    )
+    
+    lower_price = serializers.FloatField(required=False,min_value=0,help_text="Retorna apenas ofertas com preço superior a este valor.")
+
+    upper_price = serializers.FloatField(required=False,min_value=0,help_text="Retorna apenas ofertas com preço igual ou inferior a este valor.")
+
+   
+    title = serializers.CharField(required=False,help_text="Nome     do nome do jogo que será pesquisado.")
+
+
