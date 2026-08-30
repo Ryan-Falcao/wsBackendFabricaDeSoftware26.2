@@ -42,8 +42,28 @@ class CheapSharkService:
         try:
             url = f"{CheapSharkService.BASE_URL}/deals"
 
-            response = requests.get(url,headers=CheapSharkService.HEADERS,timeout=10)
+            response = requests.get(
+                url,
+                headers=CheapSharkService.HEADERS,
+                timeout=10
+            )
 
             response.raise_for_status()
 
             ofertas = response.json()
+
+            return [
+                {
+                    "nome": oferta["title"],
+                    "preco_promocional": f"USD {float(oferta["salePrice"])}",
+                    "preco_normal": f"USD {float(oferta["normalPrice"])}",
+                    "desconto": f"{oferta.get('steamRatingPercent')}%",
+                    "nota_metacritic": oferta.get("metacriticScore"),
+                    "avaliacao_steam": oferta.get("steamRatingText"),
+                    "imagem": oferta.get("thumb"),
+                }
+                for oferta in ofertas
+            ]
+
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"Erro ao buscar ofertas: {str(e)}")

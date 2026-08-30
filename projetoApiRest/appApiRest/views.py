@@ -245,6 +245,19 @@ class LoginView(APIView):
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
+class BuscarOfertasView(APIView):
+
+    def get(self, request):
+        try:
+            ofertas = CheapSharkService.buscar_ofertas()
+
+            return Response(ofertas)
+
+        except requests.RequestException:
+            
+            return Response({"erro": "A API externa parece não estar funcionando no momento"},  status=status.HTTP_504_GATEWAY_TIMEOUT)
+
+
 
 
 

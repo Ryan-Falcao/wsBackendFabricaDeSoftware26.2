@@ -1,12 +1,13 @@
 from django.urls import path
 from .views import ApiStatusView, BuscarJogosView, AdicionarJogoABiblioteca, ListarBiblioteca, ExcluirJogoDaBiblioteca, AlterarNotaDeJogo
-from .views import CriarNovoUsuario, LoginView
-from .views import (ApiStatusView, BuscarJogosView,AdicionarJogoABiblioteca,ListarBiblioteca,ExcluirJogoDaBiblioteca,AlterarNotaDeJogo,CriarNovoUsuario,LoginView,)
+from .views import CriarNovoUsuario, LoginView, BuscarOfertasView
+
 
 
 urlpatterns = [
     path('status/', ApiStatusView.as_view(), name='api-status'),
     path('jogos/buscar/', BuscarJogosView.as_view()),
+    path('jogos/buscar/ofertas/', BuscarOfertasView.as_view()),
     path('biblioteca/adicionar/jogo', AdicionarJogoABiblioteca.as_view()),
     path('biblioteca/me', ListarBiblioteca.as_view()),
     path('biblioteca/alterar/nota', AlterarNotaDeJogo.as_view()),
