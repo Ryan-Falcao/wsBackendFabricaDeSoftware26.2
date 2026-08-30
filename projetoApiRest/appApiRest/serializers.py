@@ -65,3 +65,35 @@ class LoginSerializer(serializers.Serializer):
                 "email": usuario.email,
             }
         }
+
+class OfertaFiltroSerializer(serializers.Serializer): 
+    store_id = serializers.CharField(required=False) 
+    page_number = serializers.IntegerField(required=False, min_value=0) 
+    page_size = serializers.IntegerField(required=False, min_value=1, max_value=60) 
+    sort_by = serializers.ChoiceField( 
+        required=False, 
+        choices=[ 
+            "DealRating", 
+            "Title", 
+            "Savings", 
+            "Price", 
+            "Metacritic", 
+            "Reviews", 
+            "ReviewCount", 
+            "Release", 
+            "Store", 
+            "Recent", 
+            ] ) 
+    desc = serializers.BooleanField(required=False) 
+    lower_price = serializers.FloatField(required=False, min_value=0) 
+    upper_price = serializers.FloatField(required=False, min_value=0) 
+    metacritic = serializers.IntegerField( required=False, min_value=0, max_value=100 ) 
+    steam_rating = serializers.IntegerField( required=False, min_value=0, max_value=100 ) 
+    minimum_review_count = serializers.IntegerField( required=False, min_value=0 ) 
+    max_age = serializers.IntegerField( required=False, min_value=1, max_value=2500 ) 
+    steam_app_id = serializers.CharField(required=False) 
+    title = serializers.CharField(required=False) 
+    exact = serializers.BooleanField(required=False) 
+    aaa = serializers.BooleanField(required=False) 
+    steamworks = serializers.BooleanField(required=False) 
+    on_sale = serializers.BooleanField(required=False)

@@ -57,9 +57,9 @@ class CheapSharkService:
                     "nome": oferta["title"],
                     "preco_promocional": f"USD {float(oferta["salePrice"])}",
                     "preco_normal": f"USD {float(oferta["normalPrice"])}",
-                    "desconto": f"{oferta.get('steamRatingPercent')}%",
+                    "desconto": f"{float(oferta['savings']):.2f}%",
                     "nota_metacritic": oferta.get("metacriticScore"),
-                    "avaliacao_steam": oferta.get("steamRatingText"),
+                    "avaliacao_steam": f"{oferta.get('steamRatingPercent')}%",
                     "imagem": oferta.get("thumb"),
                 }
                 for oferta in ofertas
