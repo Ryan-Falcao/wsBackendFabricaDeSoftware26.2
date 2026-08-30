@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import ApiStatusView, BuscarJogosView, AdicionarJogoABiblioteca, ListarBiblioteca, ExcluirJogoDaBiblioteca, AlterarNotaDeJogo
 from .views import CriarNovoUsuario, LoginView
+from .views import (ApiStatusView, BuscarJogosView,AdicionarJogoABiblioteca,ListarBiblioteca,ExcluirJogoDaBiblioteca,AlterarNotaDeJogo,CriarNovoUsuario,LoginView,UsuarioLogadoView,)
 
 
 urlpatterns = [
@@ -12,4 +13,9 @@ urlpatterns = [
     path('biblioteca/<int:user_id>/jogo/<int:jogo_id>/', ExcluirJogoDaBiblioteca.as_view()),
     path('usuario/cadastrar/', CriarNovoUsuario.as_view()),
     path('usuario/login/', LoginView.as_view()),
+    path(
+    'usuario/me/',
+    UsuarioLogadoView.as_view(),
+    name='usuario-logado'
+),
 ]

@@ -1,7 +1,9 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+from drf_spectacular.extensions import OpenApiAuthenticationExtension
 
 from .models import Usuario
+
 
 class UsuarioJWTAuthentication(JWTAuthentication):
 
@@ -15,3 +17,16 @@ class UsuarioJWTAuthentication(JWTAuthentication):
             return Usuario.objects.get(id=usuario_id)
         except Usuario.DoesNotExist:
             raise AuthenticationFailed("Usuário não encontrado")
+
+
+class UsuarioJWTAuthenticationScheme(OpenApiAuthenticationExtension):
+
+    target_class = 'appApiRest.authentication.UsuarioJWTAuthentication'
+    name = 'BearerAuth'
+
+    def get_security_definition(self, auto_schema):
+        return {
+            'type': 'http',
+            'scheme': 'bearer',
+            'bearerFormat': 'JWT',
+        }

@@ -10,6 +10,7 @@ import requests
 from drf_spectacular.utils import extend_schema
 from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer, CriarNovoUsuarioSerializer,  LoginSerializer
 from django.contrib.auth.hashers import make_password, check_password
+from rest_framework.permissions import IsAuthenticated
 
 class  ApiStatusView(APIView):
     def get(self, request):
@@ -212,6 +213,21 @@ class LoginView(APIView):
 
         
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+class UsuarioLogadoView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        usuario = request.user
+
+        return Response({
+            "id": usuario.id,
+            "nome": usuario.nome,
+            "email": usuario.email
+        })
 
 
 

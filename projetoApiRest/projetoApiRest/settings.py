@@ -150,4 +150,10 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API para gerenciamento de uma biblioteca de jogos.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+
+    'SECURITY': [
+        {
+            'BearerAuth': []
+        }
+    ],
 }
