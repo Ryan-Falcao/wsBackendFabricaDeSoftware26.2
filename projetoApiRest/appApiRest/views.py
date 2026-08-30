@@ -45,22 +45,20 @@ class BuscarJogosView(APIView):
 @extend_schema(request=AdicionarJogoSerializer,responses={ 201: AdicionarJogoSerializer,})
 class AdicionarJogoABiblioteca(APIView):
 
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
 
-        user_id = request.data.get("user_id")
+        usuario = request.user
         nome_jogo = request.data.get("nome_jogo")
         nota_jogo = request.data.get("nota_jogo")
 
-        if not user_id:
-            return Response({"erro": "O user_id é obrigatório"},tatus=status.HTTP_400_BAD_REQUEST)
-
+    
         if not nome_jogo:
             return Response({"erro": "nome_jogo é obrigatório"},status=status.HTTP_400_BAD_REQUEST)
 
         if nota_jogo is None:
             return Response({"erro": "A nota_jogo é obrigatória"},status=status.HTTP_400_BAD_REQUEST)
-
-        usuario = Usuario.objects.get(id=user_id)
 
         try:
             info_jogos = CheapSharkService.buscar_jogos_por_titulo(nome_jogo)
@@ -94,7 +92,8 @@ class AdicionarJogoABiblioteca(APIView):
                 "jogo": jogo.nome,
                 "nota": nota_jogo,
                 "preco": jogo.preco,
-                "metacritic_link": jogo.metacritic_link
+                "metacritic_link": jogo.metacritic_link,
+                "OBS": "Alguns jogos não possuem dados de preço ou metacritic_link, não se preocupe"
             },
             status=status.HTTP_201_CREATED
         )
@@ -103,12 +102,16 @@ class AdicionarJogoABiblioteca(APIView):
 
 class ListarBiblioteca(APIView):
 
-    def get(self, request, user_id):
+    permission_classes = [IsAuthenticated]
 
-        if not Usuario.objects.filter(id=user_id).exists():
+    def get(self, request):
+
+        usuario = request.user
+
+        if not Usuario.objects.filter(id=usuario.id).exists():
             return Response( {"erro": "O usuário não existe"},status=status.HTTP_404_NOT_FOUND)
 
-        biblioteca = Biblioteca.objects.filter(usuario_id=user_id)
+        biblioteca = Biblioteca.objects.filter(usuario_id=usuario.id)
 
         jogos = []
 
@@ -126,33 +129,37 @@ class ListarBiblioteca(APIView):
 
 class ExcluirJogoDaBiblioteca(APIView):
 
-    def delete(self, request, user_id, jogo_id):
+    permission_classes = [IsAuthenticated]
 
-        if not Biblioteca.objects.filter(usuario_id=user_id,jogo_id=jogo_id).exists():
+    def delete(self, request, jogo_id):
+
+        usuario = request.user
+
+        if not Biblioteca.objects.filter(usuario_id=usuario.id,jogo_id=jogo_id).exists():
             return Response({"erro": "Esse jogo não está na sua biblioteca"},status=status.HTTP_404_NOT_FOUND)
 
-        Biblioteca.objects.filter(usuario_id=user_id,jogo_id=jogo_id).delete()
+        Biblioteca.objects.filter(usuario_id=usuario.id,jogo_id=jogo_id).delete()
 
         return Response({"mensagem": "Jogo excluído com sucesso"},status=status.HTTP_200_OK)
     
 @extend_schema(request=AlterarNotaSerializer,responses={201: AlterarNotaSerializer,})
 class AlterarNotaDeJogo(APIView):
 
+    permission_classes = [IsAuthenticated]
+
     def put(self,request):
 
-        user_id = request.data.get("user_id")
+        usuario = request.user
         jogo_id = request.data.get("jogo_id")
         nota = request.data.get("nota")
 
-        if not user_id:
-            return Response({"erro": "user_id é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
         if not jogo_id:
             return Response({"erro": "jogo_id é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
         if nota is None:
             return Response({"erro": "a nota é obrigatória"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            biblioteca = Biblioteca.objects.get(usuario_id = user_id, jogo_id = jogo_id)
+            biblioteca = Biblioteca.objects.get(usuario_id = usuario.id, jogo_id = jogo_id)
 
         except Biblioteca.DoesNotExist:
             return Response( {"erro": "Esse jogo não está na biblioteca"},status=status.HTTP_404_NOT_FOUND)
@@ -214,20 +221,6 @@ class LoginView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
-
-
-class UsuarioLogadoView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        usuario = request.user
-
-        return Response({
-            "id": usuario.id,
-            "nome": usuario.nome,
-            "email": usuario.email
-        })
 
 
 
