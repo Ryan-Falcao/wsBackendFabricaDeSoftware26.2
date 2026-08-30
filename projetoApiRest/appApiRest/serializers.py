@@ -95,6 +95,6 @@ class OfertaFiltroSerializer(serializers.Serializer):
     upper_price = serializers.FloatField(required=False,min_value=0,help_text="Retorna apenas ofertas com preço igual ou inferior a este valor.")
 
    
-    title = serializers.CharField(required=False,help_text="Nome     do nome do jogo que será pesquisado.")
+    title = serializers.CharField(required=False,help_text="Nome do nome do jogo que será pesquisado.")
 
 
