@@ -48,7 +48,7 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError( "Email ou senha inválidos.")
 
         if not check_password(senha, usuario.senha):
-            raise serializers.ValidationError("Senha Errada OTARIO")
+            raise serializers.ValidationError("Email ou senha inválidos.")
 
         refresh = RefreshToken()
 
