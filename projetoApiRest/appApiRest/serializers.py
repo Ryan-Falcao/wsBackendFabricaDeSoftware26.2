@@ -1,4 +1,7 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import check_password
+from .models import Usuario
 
 
 class AdicionarJogoSerializer(serializers.Serializer):
@@ -31,3 +34,32 @@ class CriarNovoUsuarioSerializer(serializers.Serializer):
     email = serializers.EmailField()
     senha = serializers.CharField()
     senha_repetida = serializers.CharField()
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    senha = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        email = attrs["email"]
+        senha = attrs["senha"]
+
+        try:
+            usuario = Usuario.objects.get(email=email)
+        except Usuario.DoesNotExist:
+            raise serializers.ValidationError( "Email ou senha inválidos.")
+
+        refresh = RefreshToken()
+
+        refresh["usuario_id"] = usuario.id
+        refresh["nome"] = usuario.nome
+        refresh["email"] = usuario.email
+
+        return {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "usuario": {
+                "id": usuario.id,
+                "nome": usuario.nome,
+                "email": usuario.email,
+            }
+        }

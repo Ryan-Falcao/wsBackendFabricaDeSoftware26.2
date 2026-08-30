@@ -139,6 +139,10 @@ MAILERS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'appApiRest.authentication.UsuarioJWTAuthentication',
+    ),
 }
 
 SPECTACULAR_SETTINGS = {

@@ -5,11 +5,10 @@ from django.http import JsonResponse
 from .services.cheapshark_service import CheapSharkService
 from .models import Jogo, Biblioteca, Usuario
 from rest_framework import status
-from .services import cheapshark_service
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 import requests
 from drf_spectacular.utils import extend_schema
-from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer, CriarNovoUsuarioSerializer
+from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer, CriarNovoUsuarioSerializer,  LoginSerializer
 from django.contrib.auth.hashers import make_password, check_password
 
 class  ApiStatusView(APIView):
@@ -196,11 +195,23 @@ class CriarNovoUsuario(APIView):
 
         return Response({
             "mensagem":"Conta criada com sucesso",
+            "id": usuario.id,
             "nome": usuario.nome,
             "email": usuario.email
             }, status=status.HTTP_201_CREATED)
 
+@extend_schema(request=LoginSerializer,responses={201: LoginSerializer})
+class LoginView(APIView):
+
+    def post(self, request):
+
+        serializer = LoginSerializer(data=request.data)
+
+        if serializer.is_valid():
+            return Response(serializer.validated_data,status=status.HTTP_200_OK)
+
         
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
 
