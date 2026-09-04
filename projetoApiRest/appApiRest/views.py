@@ -11,6 +11,7 @@ from drf_spectacular.utils import extend_schema
 from .serializers import AdicionarJogoSerializer, AlterarNotaSerializer, ExcluirJogoDaBibliotecaSerializer, CriarNovoUsuarioSerializer,  LoginSerializer, OfertaFiltroSerializer
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import render
 
 class  ApiStatusView(APIView):
     def get(self, request):
@@ -266,6 +267,10 @@ class BuscarOfertasView(APIView):
 
         except requests.RequestException:
             return Response({"erro": "A API externa parece não estar funcionando no momento"},status=status.HTTP_504_GATEWAY_TIMEOUT)
+
+
+def home(request):
+    return render(request, 'index.html')
 
 
 

@@ -1,0 +1,470 @@
+{% load static %}
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Biblioteca de Jogos API</title>
+
+    <meta
+      name="description"
+      content="API REST para gerenciamento de uma biblioteca pessoal de jogos."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="container nav-content">
+        <a href="/" class="logo">
+          <span class="logo-icon">🎮</span>
+          <span>Game<span>API</span></span>
+        </a>
+
+        <nav>
+          <a href="#sobre">Sobre</a>
+          <a href="#tecnologias">Tecnologias</a>
+          <a href="#endpoints">Endpoints</a>
+          <a href="#arquitetura">Arquitetura</a>
+        </nav>
+
+        <a href="/api/docs/" class="nav-button"> Swagger ↗ </a>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+
+      <section class="hero">
+        <div class="hero-glow"></div>
+
+        <div class="container hero-grid">
+          <div class="hero-content">
+            <div class="status-badge">
+              <span class="status-dot"></span>
+              <span id="api-status">Verificando API...</span>
+            </div>
+
+            <div class="eyebrow">REST API · DJANGO · PYTHON</div>
+
+            <h1>
+              Sua biblioteca.
+              <span>Seus jogos.</span>
+              Sua API.
+            </h1>
+
+            <p class="hero-description">
+              Uma API REST desenvolvida em Django para gerenciamento de uma
+              biblioteca pessoal de jogos, com autenticação JWT, integração com
+              a CheapShark API e documentação OpenAPI.
+            </p>
+
+            <div class="hero-buttons">
+              <a href="/api/docs/" class="button primary">
+                Explorar API
+                <span>→</span>
+              </a>
+
+              <a
+                href="https://github.com/Ryan-Falcao/wsBackendFabricaDeSoftware26.2"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button secondary"
+              >
+                Ver no GitHub
+                <span>↗</span>
+              </a>
+            </div>
+
+            <div class="hero-techs">
+              <span>Python</span>
+              <span>Django</span>
+              <span>DRF</span>
+              <span>JWT</span>
+              <span>Docker</span>
+            </div>
+          </div>
+
+          <!-- CODE CARD -->
+
+          <div class="code-card">
+            <div class="code-header">
+              <div class="window-buttons">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+
+              <span class="code-title"> GET /api/status/ </span>
+
+              <span class="code-method"> GET </span>
+            </div>
+
+            <div class="code-body">
+              <pre><code><span class="code-keyword">GET</span> /api/status/
+
+<span class="code-comment">// response</span>
+
+{
+    <span class="code-property">"status"</span>:
+        <span class="code-string">"online"</span>,
+
+    <span class="code-property">"message"</span>:
+        <span class="code-string">"API esta rodando normalmente"</span>
+}</code></pre>
+            </div>
+
+            <div class="code-footer">
+              <span class="response-status">
+                <span class="status-dot"></span>
+                200 OK
+              </span>
+
+              <span> application/json </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SOBRE -->
+
+      <section id="sobre" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <span class="section-label">01 — SOBRE</span>
+
+            <h2>
+              Uma API feita para
+              <span>jogar com dados.</span>
+            </h2>
+
+            <p>
+              O projeto permite que usuários criem suas contas, pesquisem jogos,
+              encontrem ofertas e mantenham sua própria biblioteca pessoal.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <div class="feature-icon">🔐</div>
+
+              <h3>Autenticação JWT</h3>
+
+              <p>
+                Sistema de autenticação baseado em Access Token e Refresh Token
+                para proteger as operações da biblioteca.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">🎮</div>
+
+              <h3>Biblioteca pessoal</h3>
+
+              <p>
+                Adicione jogos, consulte sua biblioteca, altere suas notas e
+                remova títulos.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">💰</div>
+
+              <h3>Ofertas em tempo real</h3>
+
+              <p>
+                Integração com a CheapShark API para pesquisa de jogos e
+                consulta de ofertas.
+              </p>
+            </article>
+
+            <article class="feature-card">
+              <div class="feature-icon">📚</div>
+
+              <h3>OpenAPI</h3>
+
+              <p>
+                Documentação completa dos endpoints através do Swagger UI e
+                ReDoc.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- TECNOLOGIAS -->
+
+      <section id="tecnologias" class="section technologies-section">
+        <div class="container">
+          <div class="section-heading center">
+            <span class="section-label">02 — STACK</span>
+
+            <h2>
+              Construída com
+              <span>tecnologias modernas.</span>
+            </h2>
+          </div>
+
+          <div class="tech-grid">
+            <div class="tech-card">
+              <strong>Python</strong>
+              <span>3.12</span>
+            </div>
+
+            <div class="tech-card">
+              <strong>Django</strong>
+              <span>6.1</span>
+            </div>
+
+            <div class="tech-card">
+              <strong>DRF</strong>
+              <span>REST Framework</span>
+            </div>
+
+            <div class="tech-card">
+              <strong>MySQL</strong>
+              <span>Database</span>
+            </div>
+
+            <div class="tech-card">
+              <strong>Docker</strong>
+              <span>Containers</span>
+            </div>
+
+            <div class="tech-card">
+              <strong>JWT</strong>
+              <span>Authentication</span>
+            </div>
+
+            <div class="tech-card">
+              <strong>CheapShark</strong>
+              <span>External API</span>
+            </div>
+
+            <div class="tech-card">
+              <strong>OpenAPI</strong>
+              <span>Documentation</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ENDPOINTS -->
+
+      <section id="endpoints" class="section">
+        <div class="container">
+          <div class="section-heading">
+            <span class="section-label">03 — ENDPOINTS</span>
+
+            <h2>
+              Uma API simples de
+              <span>consumir.</span>
+            </h2>
+
+            <p>Os principais recursos disponíveis na API.</p>
+          </div>
+
+          <div class="endpoint-list">
+            <div class="endpoint-row">
+              <span class="method get">GET</span>
+
+              <code>/api/status/</code>
+
+              <span> Verifica se a API está online </span>
+            </div>
+
+            <div class="endpoint-row">
+              <span class="method get">GET</span>
+
+              <code>/api/jogos/buscar/</code>
+
+              <span> Pesquisa jogos </span>
+            </div>
+
+            <div class="endpoint-row">
+              <span class="method get">GET</span>
+
+              <code>/api/jogos/buscar/ofertas/</code>
+
+              <span> Pesquisa e filtra ofertas </span>
+            </div>
+
+            <div class="endpoint-row">
+              <span class="method post">POST</span>
+
+              <code>/api/usuario/cadastrar/</code>
+
+              <span> Cria um usuário </span>
+            </div>
+
+            <div class="endpoint-row">
+              <span class="method post">POST</span>
+
+              <code>/api/usuario/login/</code>
+
+              <span> Realiza autenticação </span>
+            </div>
+
+            <div class="endpoint-row protected">
+              <span class="method post">POST</span>
+
+              <code>/api/biblioteca/adicionar/jogo</code>
+
+              <span> 🔒 Adiciona jogo </span>
+            </div>
+
+            <div class="endpoint-row protected">
+              <span class="method get">GET</span>
+
+              <code>/api/biblioteca/me</code>
+
+              <span> 🔒 Lista biblioteca </span>
+            </div>
+
+            <div class="endpoint-row protected">
+              <span class="method put">PUT</span>
+
+              <code>/api/biblioteca/alterar/nota</code>
+
+              <span> 🔒 Altera nota </span>
+            </div>
+
+            <div class="endpoint-row protected">
+              <span class="method delete">DELETE</span>
+
+              <code>/api/biblioteca/jogo/{id}/</code>
+
+              <span> 🔒 Remove jogo </span>
+            </div>
+          </div>
+
+          <div class="docs-cta">
+            <div>
+              <span class="section-label"> DOCUMENTAÇÃO INTERATIVA </span>
+
+              <h3>Quer testar os endpoints?</h3>
+
+              <p>
+                Acesse o Swagger e faça requisições diretamente pela
+                documentação da API.
+              </p>
+            </div>
+
+            <a href="/api/docs/" class="button primary"> Abrir Swagger → </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ARQUITETURA -->
+
+      <section id="arquitetura" class="section architecture-section">
+        <div class="container">
+          <div class="section-heading center">
+            <span class="section-label">04 — ARQUITETURA</span>
+
+            <h2>
+              Por baixo da
+              <span>interface.</span>
+            </h2>
+          </div>
+
+          <div class="architecture">
+            <div class="architecture-node">
+              <span>CLIENT</span>
+              <strong>Frontend / Postman</strong>
+            </div>
+
+            <div class="architecture-line"></div>
+
+            <div class="architecture-node highlight">
+              <span>API</span>
+              <strong>Django REST Framework</strong>
+            </div>
+
+            <div class="architecture-line"></div>
+
+            <div class="architecture-node">
+              <span>AUTH</span>
+              <strong>JWT</strong>
+            </div>
+
+            <div class="architecture-line"></div>
+
+            <div class="architecture-node">
+              <span>DATABASE</span>
+              <strong>MySQL</strong>
+            </div>
+          </div>
+
+          <div class="external-api">
+            <span>EXTERNAL SERVICE</span>
+
+            <div>
+              <strong>CheapShark API</strong>
+
+              <span> Pesquisa de jogos e ofertas </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+
+      <section class="final-cta">
+        <div class="container">
+          <div class="final-content">
+            <span class="section-label"> PRONTO PARA TESTAR? </span>
+
+            <h2>
+              Explore a
+              <span>Biblioteca de Jogos API.</span>
+            </h2>
+
+            <p>
+              Consulte a documentação, autentique-se e faça suas primeiras
+              requisições.
+            </p>
+
+            <div class="hero-buttons">
+              <a href="/api/docs/" class="button primary"> Abrir Swagger → </a>
+
+              <a href="/api/redoc/" class="button secondary"> Ver ReDoc </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-content">
+        <div class="logo">
+          <span class="logo-icon">🎮</span>
+          <span>Game<span>API</span></span>
+        </div>
+
+        <p>Biblioteca de Jogos API · Projeto de portfólio</p>
+
+        <a
+          href="https://github.com/Ryan-Falcao/wsBackendFabricaDeSoftware26.2"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub ↗
+        </a>
+      </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

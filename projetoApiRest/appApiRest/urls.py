@@ -1,10 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from .views import ApiStatusView, BuscarJogosView, AdicionarJogoABiblioteca, ListarBiblioteca, ExcluirJogoDaBiblioteca, AlterarNotaDeJogo
 from .views import CriarNovoUsuario, LoginView, BuscarOfertasView
+from appApiRest.views import home
 
 
 
 urlpatterns = [
+    path('', home, name='home'),
     path('status/', ApiStatusView.as_view(), name='api-status'),
     path('jogos/buscar/', BuscarJogosView.as_view()),
     path('jogos/buscar/ofertas/', BuscarOfertasView.as_view()),
